@@ -1,0 +1,226 @@
+/* Сброс базовых отступов */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background-color: #f5f5f7;
+  color: #111827;
+}
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* обёртка по центру */
+.page-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.app-header {
+  background-color: #111827;
+  color: #f9fafb;
+}
+
+.app-header__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+}
+
+.app-logo {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.btn {
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease,
+    border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+}
+
+.btn-primary {
+  background-color: #2563eb;
+  color: #f9fafb;
+  border-color: #2563eb;
+
+  &:hover:not(:disabled) {
+    background-color: #1d4ed8;
+    border-color: #1d4ed8;
+  }
+}
+
+.btn-secondary {
+  background-color: #e5e7eb;
+  color: #111827;
+  border-color: #d1d5db;
+
+  &:hover:not(:disabled) {
+    background-color: #d1d5db;
+  }
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: #2563eb;
+  border-color: #2563eb;
+
+  &:hover:not(:disabled) {
+    background-color: rgba(37, 99, 235, 0.08);
+  }
+}
+
+.notes-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.notes-page__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.notes-page__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.notes-page__empty {
+  padding: 24px;
+  border-radius: 12px;
+  background-color: #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.note-edit-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.note-edit-page__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.note-edit-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.note-edit-page__content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.note-edit-page__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.note-edit-page__label {
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.note-edit-page__input {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+}
+
+.note-edit-page__todos {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.note-edit-page__todos-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.note-edit-page__todos-empty {
+  font-size: 0.9rem;
+  color: #6b7280;
+  padding: 8px 0;
+}
+
+.note-edit-page__todos-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.note-edit-page__todo-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.note-edit-page__todo-checkbox {
+  width: 18px;
+  height: 18px;
+}
+
+.note-edit-page__todo-input {
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.9rem;
+}
+
+.note-edit-page__todo-delete {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 2px 4px;
+}
+
+.note-edit-page__loading {
+  padding: 24px 0;
+}
