@@ -1,4 +1,3 @@
-<!-- app/pages/notes/[id].vue -->
 <script setup lang="ts">
 import type { Note, Todo } from "~/types/notes";
 
@@ -20,6 +19,80 @@ const isLoading = ref(true);
 const isCancelModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 
+// История (undo/redo)
+const history = ref<EditableNote[]>([]);
+const historyIndex = ref(-1);
+
+const cloneEditable = (note: EditableNote): EditableNote => ({
+  id: note.id,
+  title: note.title,
+  todos: note.todos.map((t) => ({ ...t })),
+});
+
+const recordHistory = () => {
+  if (!draft.value) return;
+
+  // если откатились назад и вносим новое изменение — обрезаем "будущее"
+  if (historyIndex.value < history.value.length - 1) {
+    history.value.splice(historyIndex.value + 1);
+  }
+
+  const snapshot = cloneEditable(draft.value);
+  history.value.push(snapshot);
+  historyIndex.value = history.value.length - 1;
+};
+
+const initHistory = () => {
+  history.value = [];
+  historyIndex.value = -1;
+  if (!draft.value) return;
+  // стартовое состояние
+  recordHistory();
+};
+
+const applyFromHistory = () => {
+  if (historyIndex.value < 0 || historyIndex.value >= history.value.length) {
+    return;
+  }
+
+  const snapshot = history.value[historyIndex.value];
+
+  if (!snapshot) {
+    return;
+  }
+
+  draft.value = cloneEditable(snapshot);
+};
+
+const canUndo = computed(() => historyIndex.value > 0);
+const canRedo = computed(() => historyIndex.value < history.value.length - 1);
+
+const undo = () => {
+  if (!canUndo.value) return;
+  historyIndex.value -= 1;
+  applyFromHistory();
+};
+
+const redo = () => {
+  if (!canRedo.value) return;
+  historyIndex.value += 1;
+  applyFromHistory();
+};
+
+// Горячие клавиши: Ctrl+Z / Shift+Ctrl+Z
+const handleKeyDown = (event: KeyboardEvent) => {
+  if (event.key.toLowerCase() === "z" && event.ctrlKey) {
+    event.preventDefault();
+    if (event.shiftKey) {
+      redo();
+    } else {
+      undo();
+    }
+  }
+};
+
+// Инициализация черновика
+
 const createEmptyEditableNote = (): EditableNote => ({
   id: null,
   title: "",
@@ -37,7 +110,9 @@ onMounted(() => {
 
   if (isNew.value) {
     draft.value = createEmptyEditableNote();
+    initHistory();
     isLoading.value = false;
+    window.addEventListener("keydown", handleKeyDown);
     return;
   }
 
@@ -51,11 +126,27 @@ onMounted(() => {
 
   originalNote.value = existing;
   draft.value = toEditable(existing);
+  initHistory();
   isLoading.value = false;
+  window.addEventListener("keydown", handleKeyDown);
 });
+
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", handleKeyDown);
+});
+
+// редактирования
+
+const handleTitleInput = (event: Event) => {
+  if (!draft.value) return;
+  recordHistory();
+  draft.value.title = (event.target as HTMLInputElement).value;
+};
 
 const addTodo = () => {
   if (!draft.value) return;
+  recordHistory();
+
   const id = Date.now().toString() + Math.random().toString(16).slice(2);
   const newTodo: Todo = {
     id,
@@ -67,20 +158,28 @@ const addTodo = () => {
 
 const updateTodoText = (id: string, text: string) => {
   if (!draft.value) return;
+  recordHistory();
+
   const todo = draft.value.todos.find((t) => t.id === id);
   if (todo) todo.text = text;
 };
 
 const toggleTodo = (id: string) => {
   if (!draft.value) return;
+  recordHistory();
+
   const todo = draft.value.todos.find((t) => t.id === id);
   if (todo) todo.completed = !todo.completed;
 };
 
 const removeTodo = (id: string) => {
   if (!draft.value) return;
+  recordHistory();
+
   draft.value.todos = draft.value.todos.filter((t) => t.id !== id);
 };
+
+// Сохранение / отмена / удаление
 
 const handleSave = () => {
   if (!draft.value) return;
@@ -140,10 +239,27 @@ const confirmDelete = () => {
       <div class="note-edit-page__actions">
         <button
           type="button"
+          class="btn btn-secondary"
+          :disabled="!canUndo"
+          @click="undo"
+        >
+          ⟲ Отменить изменение
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          :disabled="!canRedo"
+          @click="redo"
+        >
+          ⟳ Повторить
+        </button>
+
+        <button
+          type="button"
           class="btn btn-outline"
           @click="handleCancelClick"
         >
-          Отменить
+          Отменить редактирование
         </button>
         <button
           v-if="!isNew"
@@ -166,10 +282,11 @@ const confirmDelete = () => {
         </label>
         <input
           id="note-title"
-          v-model="draft.title"
+          :value="draft.title"
           type="text"
           class="note-edit-page__input"
           placeholder="Введите заголовок"
+          @input="handleTitleInput"
         />
       </div>
 
