@@ -1,4 +1,3 @@
-<!-- app/components/NoteCard.vue -->
 <script setup lang="ts">
 import type { Note } from "~/types/notes";
 
@@ -8,6 +7,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: "open", id: string): void;
+  (e: "delete", id: string): void;
 }>();
 
 const previewTodos = computed(() => props.note.todos.slice(0, 3));
@@ -17,6 +17,10 @@ const hiddenCount = computed(() =>
 
 const handleOpen = () => {
   emit("open", props.note.id);
+};
+
+const handleDeleteClick = () => {
+  emit("delete", props.note.id);
 };
 </script>
 
@@ -50,7 +54,13 @@ const handleOpen = () => {
       <button type="button" class="btn btn-secondary" @click="handleOpen">
         Открыть
       </button>
-      <!-- Кнопку удаления добавим на шаге с модалками -->
+      <button
+        type="button"
+        class="btn btn-outline note-card__delete"
+        @click="handleDeleteClick"
+      >
+        Удалить
+      </button>
     </footer>
   </article>
 </template>
@@ -103,6 +113,11 @@ const handleOpen = () => {
 .note-card__footer {
   margin-top: 8px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.note-card__delete {
+  font-size: 0.85rem;
 }
 </style>

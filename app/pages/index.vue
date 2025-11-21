@@ -18,6 +18,34 @@ const handleCreate = () => {
 const handleOpenNote = (id: string) => {
   navigateTo(`/notes/${id}`);
 };
+
+// удаление с подтверждением
+const noteIdToDelete = ref<string | null>(null);
+const isDeleteModalOpen = ref(false);
+
+const noteTitleToDelete = computed(() => {
+  if (!noteIdToDelete.value) return "эту заметку";
+  const note = notesStore.getNoteById(noteIdToDelete.value);
+  return note?.title || "эту заметку";
+});
+
+const handleAskDelete = (id: string) => {
+  noteIdToDelete.value = id;
+  isDeleteModalOpen.value = true;
+};
+
+const cancelDelete = () => {
+  isDeleteModalOpen.value = false;
+  noteIdToDelete.value = null;
+};
+
+const confirmDelete = () => {
+  if (noteIdToDelete.value) {
+    notesStore.deleteNote(noteIdToDelete.value);
+  }
+  isDeleteModalOpen.value = false;
+  noteIdToDelete.value = null;
+};
 </script>
 
 <template>
@@ -43,7 +71,26 @@ const handleOpenNote = (id: string) => {
         :key="note.id"
         :note="note"
         @open="handleOpenNote"
+        @delete="handleAskDelete"
       />
     </div>
+
+    <!-- Модалка подтверждения удаления -->
+    <BaseModal
+      :open="isDeleteModalOpen"
+      title="Удалить заметку?"
+      @close="cancelDelete"
+    >
+      <p>Действие необратимо. Будет удалена {{ noteTitleToDelete }}.</p>
+
+      <template #footer>
+        <button type="button" class="btn btn-secondary" @click="cancelDelete">
+          Отмена
+        </button>
+        <button type="button" class="btn btn-primary" @click="confirmDelete">
+          Удалить
+        </button>
+      </template>
+    </BaseModal>
   </section>
 </template>
