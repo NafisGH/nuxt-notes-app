@@ -371,7 +371,7 @@ const confirmDelete = () => {
       title="Удалить заметку?"
       @close="isDeleteModalOpen = false"
     >
-      <p>Действие необратимо. Заметка будет удалена.</p>
+      <p>Вы действительно хотите удалить заметку?</p>
 
       <template #footer>
         <button

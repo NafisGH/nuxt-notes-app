@@ -81,7 +81,7 @@ const confirmDelete = () => {
       title="Удалить заметку?"
       @close="cancelDelete"
     >
-      <p>Действие необратимо. Будет удалена {{ noteTitleToDelete }}.</p>
+      <p>Вы действительно хотите удалить заметку? {{ noteTitleToDelete }}.</p>
 
       <template #footer>
         <button type="button" class="btn btn-secondary" @click="cancelDelete">
