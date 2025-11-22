@@ -13,4 +13,5 @@ export interface Note {
   todos: Todo[];
   createdAt: string; // ISO-строка даты
   updatedAt: string; // ISO-строка даты
+  completed: boolean;
 }

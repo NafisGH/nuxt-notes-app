@@ -16,6 +16,8 @@ const draft = ref<EditableNote | null>(null);
 const originalNote = ref<Note | null>(null);
 const isLoading = ref(true);
 
+const { showToast } = useToast();
+
 const isCancelModalOpen = ref(false);
 const isDeleteModalOpen = ref(false);
 
@@ -190,6 +192,7 @@ const handleSave = () => {
       title: title || "Без названия",
       todos: draft.value.todos,
     });
+    showToast("Заметка сохранена");
     navigateTo(`/notes/${newId}`);
     return;
   }
@@ -203,6 +206,7 @@ const handleSave = () => {
   };
 
   notesStore.updateNote(updated);
+  showToast("Заметка сохранена");
 };
 
 const handleCancelClick = () => {
@@ -232,9 +236,17 @@ const confirmDelete = () => {
 <template>
   <section v-if="!isLoading && draft" class="note-edit-page">
     <header class="note-edit-page__header">
-      <h1>
-        {{ isNew ? "Новая заметка" : "Редактирование заметки" }}
-      </h1>
+      <div class="note-edit-page__title-block">
+        <nav class="note-edit-page__breadcrumbs">
+          <NuxtLink to="/">Заметки</NuxtLink>
+          <span>/</span>
+          <span>{{ isNew ? "Новая заметка" : "Редактирование заметки" }}</span>
+        </nav>
+
+        <h1>
+          {{ isNew ? "Новая заметка" : "Редактирование заметки" }}
+        </h1>
+      </div>
 
       <div class="note-edit-page__actions">
         <button

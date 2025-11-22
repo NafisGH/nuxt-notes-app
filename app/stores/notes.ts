@@ -37,6 +37,10 @@ export const useNotesStore = defineStore("notes", {
           this.notes = parsed.map((note) => ({
             ...note,
             todos: Array.isArray(note.todos) ? note.todos : [],
+            completed:
+              typeof (note as any).completed === "boolean"
+                ? (note as any).completed
+                : false,
           }));
         }
       } catch (error) {
@@ -59,6 +63,7 @@ export const useNotesStore = defineStore("notes", {
         todos: payload.todos ?? [],
         createdAt: now,
         updatedAt: now,
+        completed: false,
       };
 
       this.notes.push(newNote);
@@ -81,6 +86,14 @@ export const useNotesStore = defineStore("notes", {
 
     deleteNote(id: NoteId) {
       this.notes = this.notes.filter((note) => note.id !== id);
+      this.saveToStorage();
+    },
+    setNoteCompleted(id: NoteId, completed: boolean) {
+      const note = this.notes.find((n) => n.id === id);
+      if (!note) return;
+
+      note.completed = completed;
+      note.updatedAt = new Date().toISOString();
       this.saveToStorage();
     },
   },

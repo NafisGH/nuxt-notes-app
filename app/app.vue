@@ -9,5 +9,6 @@
     <main class="page-container">
       <NuxtPage />
     </main>
+    <AppToast />
   </div>
 </template>

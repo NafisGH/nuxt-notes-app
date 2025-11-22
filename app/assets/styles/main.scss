@@ -224,3 +224,50 @@ body {
 .note-edit-page__loading {
   padding: 24px 0;
 }
+
+.note-edit-page__title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.note-edit-page__breadcrumbs {
+  font-size: 0.85rem;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  a {
+    color: #2563eb;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.note-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.note-card__complete {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.note-card__complete-checkbox {
+  width: 16px;
+  height: 16px;
+}
+
+.note-card__complete-label {
+  user-select: none;
+}

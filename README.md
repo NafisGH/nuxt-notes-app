@@ -1,75 +1,63 @@
-# Nuxt Minimal Starter
+# 📝 Nuxt Notes App
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Небольшое SPA-приложение для заметок, выполненное на **Nuxt 4 (Composition API)** с использованием **Pinia**, **TypeScript** и **SCSS**.
 
-## Setup
+## 🚀 Функциональность
 
-Make sure to install dependencies:
+- Главная страница со списком всех заметок:
+  - просмотр заголовка и первых задач (`Todo`);
+  - удаление заметки с подтверждением (модальное окно);
+  - чекбокс «Выполнено» для отметки всей заметки.
+- Страница создания/редактирования заметки:
+  - добавление, редактирование, удаление пунктов Todo;
+  - отметка Todo как выполненного;
+  - сохранение заметки;
+  - отмена редактирования с подтверждением;
+  - удаление заметки;
+  - **Undo / Redo** изменений (`Ctrl+Z`, `Shift+Ctrl+Z`);
+  - тост-уведомление при сохранении.
+- Состояние хранится в **localStorage**, данные сохраняются между перезагрузками.
+- Используется **адаптивная, кросс-браузерная верстка**.
+- Все подтверждения через кастомные **модальные окна**, без `alert`.
+
+---
+
+## 🧩 Технологии
+
+- [Nuxt 4](https://nuxt.com)
+- [Vue 3 Composition API](https://vuejs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Pinia](https://pinia.vuejs.org/)
+- [SCSS](https://sass-lang.com/)
+- [Docker & Docker Compose](https://www.docker.com/)
+
+---
+
+## ⚙️ Запуск локально (без Docker)
 
 ```bash
-# npm
+# установка зависимостей
 npm install
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
+# запуск dev-сервера
 npm run dev
 
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
+# сборка продакшн-версии
 npm run build
 
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
+# предпросмотр собранного проекта
 npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Приложение будет доступно по адресу:
+👉 http://localhost:3000
+
+🐳 Запуск через Docker
+
+Требуются установленные Docker и Docker Compose.
+
+Из корня проекта:
+
+docker-compose up --build
+После сборки приложение доступно по адресу:
+👉 http://localhost:3000

@@ -46,6 +46,10 @@ const confirmDelete = () => {
   isDeleteModalOpen.value = false;
   noteIdToDelete.value = null;
 };
+
+const handleToggleCompleted = (payload: { id: string; completed: boolean }) => {
+  notesStore.setNoteCompleted(payload.id, payload.completed);
+};
 </script>
 
 <template>
@@ -72,6 +76,7 @@ const confirmDelete = () => {
         :note="note"
         @open="handleOpenNote"
         @delete="handleAskDelete"
+        @toggle-completed="handleToggleCompleted"
       />
     </div>
 

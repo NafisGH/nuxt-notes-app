@@ -8,12 +8,17 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: "open", id: string): void;
   (e: "delete", id: string): void;
+  (e: "toggle-completed", payload: { id: string; completed: boolean }): void;
 }>();
 
 const previewTodos = computed(() => props.note.todos.slice(0, 3));
 const hiddenCount = computed(() =>
   Math.max(0, props.note.todos.length - previewTodos.value.length)
 );
+const handleToggleCompleted = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  emit("toggle-completed", { id: props.note.id, completed: target.checked });
+};
 
 const handleOpen = () => {
   emit("open", props.note.id);
@@ -27,6 +32,16 @@ const handleDeleteClick = () => {
 <template>
   <article class="note-card">
     <header class="note-card__header">
+      <label class="note-card__complete">
+        <input
+          type="checkbox"
+          class="note-card__complete-checkbox"
+          :checked="note.completed"
+          @change="handleToggleCompleted"
+        />
+        <span class="note-card__complete-label">Выполнено</span>
+      </label>
+
       <h2 class="note-card__title">
         {{ note.title || "Без названия" }}
       </h2>
